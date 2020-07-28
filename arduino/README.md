@@ -1,6 +1,6 @@
 # NodeMCU (ESP8266) y BMP280 ##
 La parte del hardware de este proyecto esta compuesto por un NodeMCU basado en el popular ESP8266, y el elemento encargado de tomar las lecturas del medio ambiente es un BMP280.
-![NodeMCU Edge Sensor](https://drive.google.com/file/d/1Wph26aK7DF4ZBxoyj_Wlk_zRTXpHRilp/view)
+![NodeMCU Edge Sensor](IMG_20200727_182911.jpg)
 ## Codigo fuente ##
 Las tareas que realiza el NodeMCU es primeramente conectarse a la red WiFi, posteriormente configura el sensor BMP280 para comunicarse con el mediante el protocolo I2C.
 Luego de esto, toma la muestra, realiza una conversion básica y envia los datos por POST en formato JSON al servidor en Heroku.
