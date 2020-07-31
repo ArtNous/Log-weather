@@ -90,9 +90,10 @@ app.get('/values', async function (req, http_res) {
     // pool.end()
     http_res.status(200).json({
       total,
-      count: values.length,
-      data: values,
-      msg: total > 0 ? 'Haz algo increible' : '¿Que esperas para conocer el clima? Registra datos!'
+      // data: values,
+      temperature: values.map(item => parseFloat(item.temperature)),
+      pressure: values.map(item => parseFloat(item.pressure)),
+      date: values.map(item => item.date)
     })
   })
 });
