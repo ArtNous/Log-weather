@@ -7,6 +7,7 @@ import NoData from './NoData';
 import TempChart from './TempChart';
 import PressureChart from './PressureChart';
 import LineChart from './LineChart';
+import ComparisonLine from './ComparisonLine';
 import DaterangeFilter from './DaterangeFilter';
 
 const Main = props => {
@@ -19,6 +20,8 @@ const Main = props => {
     const [endDate, setEndDate] = React.useState(new Date());
 
     const [loading, setLoading] = React.useState(false)
+
+    console.info(temperature, pressure)
 
     const fetchData = async () => {
         const searchParams = new URLSearchParams()
@@ -36,14 +39,16 @@ const Main = props => {
             }
         }).then(response => {
             setLoading(false)
-            setTemperature(response.data.data.map(reading => ({
-                values: parseFloat(reading.temperature),
-                label: moment(reading.date).tz('UTC').format('LLL')
-            })))
-            setPressure(response.data.data.map(reading => ({
-                values: parseFloat(reading.pressure),
-                label: moment(reading.date).tz('UTC').format('LLL')
-            })))
+            let temp = response.data.temperature.map((temp, index) => ({
+                values: parseFloat(temp),
+                label: moment(response.data.date[index]).toDate()
+            }))
+            let pres = response.data.pressure.map((pres, index) => ({
+                values: parseFloat(pres),
+                label: moment(response.data.date[index]).toDate()
+            }))
+            setTemperature(temp)
+            setPressure(pres)
         }).catch(response => {
             setLoading(false)
             console.error(response)
@@ -70,8 +75,9 @@ const Main = props => {
             <div className="chart_container">
                 <Loader loading={loading} />
                 <NoData loading={loading} temperatureLength={temperature.length} pressureLength={pressure.length} />
-                <LineChart lineColor="rgba(126, 15, 15, 0.925)" data={temperature} xFormatLabel="°C" chartTitle="Temperatura" />
-                <LineChart lineColor="rgba(22, 42, 131, 0.664)" data={pressure} xFormatLabel="hPa" chartTitle="Presión Atmosférica" />
+                <ComparisonLine lineColor="rgba(126, 15, 15, 0.925)" step={0.5} temperature={temperature} pressure={pressure} tempFormat="°C" presFormat="hPa" />
+                {/* <LineChart lineColor="rgba(126, 15, 15, 0.925)" step={0.5} data={temperature} xFormatLabel="°C" chartTitle="Temperatura" />
+                <LineChart presFormat="hPa" tempFormat=" °C" lineColor="rgba(22, 42, 131, 0.664)" data={pressure} /> */}
             </div>
         </>
     )
